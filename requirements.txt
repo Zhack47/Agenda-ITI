@@ -1,5 +1,5 @@
 requests
 csv
 datetime
-bs4
+beautifulsoup4
 time
