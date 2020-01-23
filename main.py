@@ -2,7 +2,6 @@ import Groups
 import Course
 import server_request as sr
 import Student
-import tkinter as tk
 
 
 
