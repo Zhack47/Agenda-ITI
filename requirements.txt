@@ -1,5 +1,5 @@
 requests
-csv
+python-csv
 datetime
 beautifulsoup4
 time
