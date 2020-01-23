@@ -74,4 +74,3 @@ def main():
             print(cl.scheduled)
             print(cl.room)
             print()
-main()
