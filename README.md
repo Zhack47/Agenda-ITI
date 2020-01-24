@@ -2,6 +2,9 @@
 Extension de l'agenda Insa rouen, dépend d'une liste de groupe (csv).
 
 WIP
+v1.0.0 :
+
+        -Fonctionnel sur android, triple tap
 
 v0.1.9 : 
 
