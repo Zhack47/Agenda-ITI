@@ -5,9 +5,11 @@ import date_checker
 
 
 def recuperate():
+    # ip = 193.49.10.198
     time_str = date_checker.get_date_from_time_unit(time.ctime())
     curr_date = ''.join([time_str[2], time_str[1], time_str[0]])
-    r = requests.get('http://agendas.insa-rouen.fr/day.php?cal=2019-ASI-S5&getdate=', curr_date)
+    payload = {'cal' : '2019-ASI-S6', 'getdate' : curr_date}
+    r = requests.get('http://193.49.10.198/day.php', params=payload)
     soup = BeautifulSoup(r.text, 'html.parser')
     mydivs = soup.findAll("a", {"class": "ps"})
     courses = [(i.attrs) for i in mydivs]

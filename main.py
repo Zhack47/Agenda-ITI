@@ -74,3 +74,65 @@ def main():
             print(cl.scheduled)
             print(cl.room)
             print()
+
+
+
+def main_mobile(nom, prenom):
+    students = set_students_data()
+    id = retrieve_id_from_name(students, nom, prenom)
+    classes = today_courses(students[id-1])
+    res =''
+    for cl in classes:
+        if cl != None:
+            res+=cl.title
+            res+='\n'
+            res+=cl.scheduled
+            res+='\n'
+            res+=cl.room
+            res+='\n'
+            res+='\n'
+    print('Done')
+    return res
+
+from kivy.app import App
+from kivy.uix.label import Label
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.textinput import TextInput
+import main
+class LoginScreen(GridLayout):
+
+    res = ''
+    def __init__(self, **kwargs):
+
+        super(LoginScreen, self).__init__(**kwargs)
+        self.cols = 2
+        self.add_widget(Label(text='Nom'))
+        self.nom = TextInput(multiline=False)
+        self.add_widget(self.nom)
+        self.add_widget(Label(text='Prénom'))
+        self.prenom = TextInput(multiline=False)
+        self.add_widget(self.prenom)
+        to_remove = Label(text='')
+        self.add_widget(Label(text='Cours de la journée'))
+        self.add_widget(to_remove)
+
+    def on_touch_up(self, touch):
+        if touch.is_triple_tap:
+            self.res = main.main_mobile(self.nom.text, self.prenom.text)
+            result = Label(text=self.res)
+            self.add_widget(result)
+            self.do_layout()
+            # self.remove_widget(result)
+            self.do_layout()
+        else:
+            pass
+
+
+class MainApp(App):
+
+    def build(self):
+        return LoginScreen()
+
+if __name__ == '__main__':
+    app = MainApp()
+    app.run()
