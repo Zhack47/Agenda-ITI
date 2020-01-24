@@ -3,6 +3,11 @@ import Course
 import server_request as sr
 import Student
 
+from kivy.uix.widget import *
+from kivy.app import App
+from kivy.uix.label import Label
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.textinput import TextInput
 
 
 Nom = ''
@@ -94,11 +99,6 @@ def main_mobile(nom, prenom):
     print('Done')
     return res
 
-from kivy.app import App
-from kivy.uix.label import Label
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.textinput import TextInput
-import main
 class LoginScreen(GridLayout):
 
     res = ''
@@ -113,12 +113,14 @@ class LoginScreen(GridLayout):
         self.prenom = TextInput(multiline=False)
         self.add_widget(self.prenom)
         to_remove = Label(text='')
+        #edt = Widget(to_remove)
+        #self.add_widget(edt)
         self.add_widget(Label(text='Cours de la journée'))
         self.add_widget(to_remove)
 
     def on_touch_up(self, touch):
         if touch.is_triple_tap:
-            self.res = main.main_mobile(self.nom.text, self.prenom.text)
+            self.res = main_mobile(self.nom.text, self.prenom.text)
             result = Label(text=self.res)
             self.add_widget(result)
             self.do_layout()
@@ -126,6 +128,8 @@ class LoginScreen(GridLayout):
             self.do_layout()
         else:
             pass
+
+# class edtDisplay():
 
 
 class MainApp(App):
