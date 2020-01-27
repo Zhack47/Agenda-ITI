@@ -19,7 +19,9 @@ students = [None]*69
 
 
 def set_students_data():
+    print('access')
     for i in range(len(students)):
+        print(i)
         students[i] = Student.Student()
     for i in range(len(students)):
         students[i].id = i+1
@@ -42,17 +44,31 @@ def set_students_data():
 
 def today_courses(student):
     courses_of_today = sr.recuperate()
+    print(len(courses_of_today))
+    print(courses_of_today)
     list_of_Courses =[None]*len(courses_of_today)
     for i in range(len(courses_of_today)):
         test_course = Course.Course()
-        test_course.set_scheduled(courses_of_today[i][3])
-        test_course.set_room(courses_of_today[i][2])
-        test_course.set_teacher(courses_of_today[i][1])
+        try :
+            test_course.set_scheduled(courses_of_today[i][3])
+        except IndexError:
+            test_course.set_scheduled('N/A')
+        try:
+            test_course.set_room(courses_of_today[i][2])
+        except IndexError:
+            test_course.set_room('N/A')
+        try:
+            test_course.set_teacher(courses_of_today[i][1])
+        except IndexError:
+            test_course.set_teacher('N/A')
         test_course.set_title(courses_of_today[i][0])
         test_course.group = Groups.extract_group_from_course(test_course)
         test_course.subject = Course.extract_subject_from_course_title(test_course.title)
-        subject = test_course.title.split(':')[1].split('-')[1].split(' ')[0]
-        subject_lv =test_course.title.split(' ')[2]
+        try:
+            subject = test_course.title.split(':')[1].split('-')[1].split(' ')[0]
+            subject_lv =test_course.title.split(' ')[2]
+        except IndexError:
+            subject = subject_lv = 'N/A'
         if test_course.group != '*':
             if (test_course.group) == (student.get_subject_group(subject)) or (test_course.group) == student.get_subject_group(subject)[0] or test_course.group == student.get_subject_group(subject_lv) or test_course.group == student.get_subject_group(subject_lv)[0]:
                 list_of_Courses[i] = test_course
@@ -105,7 +121,7 @@ class LoginScreen(GridLayout):
     def __init__(self, **kwargs):
 
         super(LoginScreen, self).__init__(**kwargs)
-        self.cols = 2
+        self.cols = 1
         self.add_widget(Label(text='Nom'))
         self.nom = TextInput(multiline=False)
         self.add_widget(self.nom)
@@ -121,7 +137,8 @@ class LoginScreen(GridLayout):
     def on_touch_up(self, touch):
         if touch.is_triple_tap:
             self.res = main_mobile(self.nom.text, self.prenom.text)
-            result = Label(text=self.res)
+            result = Label(text=self.res, halign='center', color=[0.32, 1, 0.89, 1])
+            edt = edtDisplay(self.res)
             self.add_widget(result)
             self.do_layout()
             # self.remove_widget(result)
@@ -129,13 +146,28 @@ class LoginScreen(GridLayout):
         else:
             pass
 
-# class edtDisplay():
+class edtDisplay(Label):
+    def __init__(self, label, **kwargs):
+        super(Label, self).__init__(text=label)
+
+    # def on_text(self, instance, text):
+    #     #super(Label,self).on_text(instance, text)
+    #     print(text)
+
+    def update_padding(self, text_input, *args):
+        text_width = text_input._get_text_width(
+            text_input.text,
+            text_input.tab_width,
+            text_input._label_cached
+        )
+        text_input.padding_x = (text_input.width - text_width) / 2
 
 
 class MainApp(App):
 
     def build(self):
         return LoginScreen()
+
 
 if __name__ == '__main__':
     app = MainApp()

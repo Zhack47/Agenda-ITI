@@ -20,7 +20,10 @@ def extract_group_from_course(course):
     elif 'pao' in course.title:
         group = 'pao'
     elif 'Asi32' in course.title:
-        group = course.title.split('(')[-1].split(')')[0].split('_TD')[1]
+        try:
+            group = course.title.split('(')[-1].split(')')[0].split('_TD')[1]
+        except IndexError:
+            group = 'N/A'
     elif 'Anglais' in course.title:
         group = course.title.split('(')[-1].split(')')[0].split('_TD')[1]
     elif ('Espagnol' in course.title) and ('RN' in course.title):
