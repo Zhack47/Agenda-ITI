@@ -9,6 +9,28 @@ from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 
+from kivy.app import App
+from kivy.uix.label import Label
+from kivy.uix.scrollview import ScrollView
+from kivy.properties import StringProperty
+from kivy.lang import Builder
+
+long_text = 'yay moo cow foo bar moo baa ' * 100
+
+Builder.load_string('''
+<ScrollableLabel>:
+    Label:
+        size_hint_y: None
+        height: self.texture_size[1]
+        text_size: self.width, None
+        text: root.text
+''')
+
+
+class ScrollableLabel(ScrollView):
+    text = StringProperty('')
+
+
 
 Nom = ''
 Prenom = ''
@@ -130,15 +152,16 @@ class LoginScreen(GridLayout):
         self.add_widget(self.prenom)
         to_remove = Label(text='')
         #edt = Widget(to_remove)
-        #self.add_widget(edt)
         self.add_widget(Label(text='Cours de la journée'))
         self.add_widget(to_remove)
+        self.edt = edtDisplay('')
 
     def on_touch_up(self, touch):
         if touch.is_triple_tap:
+            super().on_touch_down(touch)
             self.res = main_mobile(self.nom.text, self.prenom.text)
-            result = Label(text=self.res, halign='center', color=[0.32, 1, 0.89, 1])
-            edt = edtDisplay(self.res)
+            result = ScrollableLabel()  # , halign='center', color=[0.32, 1, 0.89, 1])
+            result.text = self.res
             self.add_widget(result)
             self.do_layout()
             # self.remove_widget(result)
