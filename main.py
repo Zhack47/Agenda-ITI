@@ -24,6 +24,7 @@ Builder.load_string('''
         height: self.texture_size[1]
         text_size: self.width, None
         text: root.text
+
 ''')
 
 
@@ -137,9 +138,31 @@ def main_mobile(nom, prenom):
     print('Done')
     return res
 
+
+
+class edtDisplay(ScrollableLabel):
+    def __init__(self, **kwargs):
+        super(ScrollableLabel, self).__init__(**kwargs)
+        self.text = ''
+
+    def update_padding(self, text_input, *args):
+        text_width = text_input._get_text_width(
+            text_input.text,
+            text_input.tab_width,
+            text_input._label_cached
+        )
+        text_input.padding_x = (text_input.width - text_width) / 2
+
+    def set_text(self, text):
+        self.text = text
+
+
+
+
 class LoginScreen(GridLayout):
 
     res = ''
+    edt = edtDisplay()
     def __init__(self, **kwargs):
 
         super(LoginScreen, self).__init__(**kwargs)
@@ -151,45 +174,32 @@ class LoginScreen(GridLayout):
         self.prenom = TextInput(multiline=False)
         self.add_widget(self.prenom)
         to_remove = Label(text='')
-        #edt = Widget(to_remove)
         self.add_widget(Label(text='Cours de la journée'))
-        self.add_widget(to_remove)
-        self.edt = edtDisplay('')
+        # self.add_widget(self.edt)
+        self.edt = edtDisplay()
 
     def on_touch_up(self, touch):
         if touch.is_triple_tap:
-            super().on_touch_down(touch)
             self.res = main_mobile(self.nom.text, self.prenom.text)
-            result = ScrollableLabel()  # , halign='center', color=[0.32, 1, 0.89, 1])
-            result.text = self.res
+            # result = ScrollableLabel()  # , halign='center', color=[0.32, 1, 0.89, 1])
+            result = edtDisplay()
+            result.text = (self.res)
             self.add_widget(result)
             self.do_layout()
             # self.remove_widget(result)
             self.do_layout()
+            print(self.edt.text)
         else:
             pass
 
-class edtDisplay(Label):
-    def __init__(self, label, **kwargs):
-        super(Label, self).__init__(text=label)
 
-    # def on_text(self, instance, text):
-    #     #super(Label,self).on_text(instance, text)
-    #     print(text)
-
-    def update_padding(self, text_input, *args):
-        text_width = text_input._get_text_width(
-            text_input.text,
-            text_input.tab_width,
-            text_input._label_cached
-        )
-        text_input.padding_x = (text_input.width - text_width) / 2
 
 
 class MainApp(App):
 
     def build(self):
-        return LoginScreen()
+        log = LoginScreen()
+        return log
 
 
 if __name__ == '__main__':
