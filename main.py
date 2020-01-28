@@ -115,6 +115,7 @@ def main():
     for cl in classes:
         if cl != None:
             print(cl.title)
+            print(cl.teacher)
             print(cl.scheduled)
             print(cl.room)
             print()
@@ -181,12 +182,12 @@ class LoginScreen(GridLayout):
     def on_touch_up(self, touch):
         if touch.is_triple_tap:
             self.res = main_mobile(self.nom.text, self.prenom.text)
+            self.clear_widgets()
             # result = ScrollableLabel()  # , halign='center', color=[0.32, 1, 0.89, 1])
             result = edtDisplay()
             result.text = (self.res)
             self.add_widget(result)
             self.do_layout()
-            # self.remove_widget(result)
             self.do_layout()
             print(self.edt.text)
         else:
