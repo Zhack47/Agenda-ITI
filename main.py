@@ -11,6 +11,7 @@ from kivy.uix.textinput import TextInput
 
 from kivy.app import App
 from kivy.uix.label import Label
+from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
 from kivy.properties import StringProperty
 from kivy.lang import Builder
@@ -131,6 +132,8 @@ def main_mobile(nom, prenom):
         if cl != None:
             res+=cl.title
             res+='\n'
+            res+=cl.teacher
+            res+='\n'
             res+=cl.scheduled
             res+='\n'
             res+=cl.room
@@ -164,9 +167,13 @@ class LoginScreen(GridLayout):
 
     res = ''
     edt = edtDisplay()
+    nom =TextInput
+    prenom = TextInput
     def __init__(self, **kwargs):
 
         super(LoginScreen, self).__init__(**kwargs)
+        validation_button = Button(text='Valider', font_size=14)
+        validation_button.on_press = self.callback_for_button
         self.cols = 1
         self.add_widget(Label(text='Nom'))
         self.nom = TextInput(multiline=False)
@@ -174,24 +181,42 @@ class LoginScreen(GridLayout):
         self.add_widget(Label(text='Prénom'))
         self.prenom = TextInput(multiline=False)
         self.add_widget(self.prenom)
-        to_remove = Label(text='')
-        self.add_widget(Label(text='Cours de la journée'))
+        # to_remove = Label(text='')
+        self.add_widget(Label(text=''))
+        self.add_widget(validation_button)
         # self.add_widget(self.edt)
         self.edt = edtDisplay()
 
-    def on_touch_up(self, touch):
-        if touch.is_triple_tap:
-            self.res = main_mobile(self.nom.text, self.prenom.text)
-            self.clear_widgets()
-            # result = ScrollableLabel()  # , halign='center', color=[0.32, 1, 0.89, 1])
-            result = edtDisplay()
-            result.text = (self.res)
-            self.add_widget(result)
-            self.do_layout()
-            self.do_layout()
-            print(self.edt.text)
-        else:
-            pass
+    def callback_for_button(self):
+        self.res = main_mobile(self.nom.text, self.prenom.text)
+        self.clear_widgets()
+        # result = ScrollableLabel()  # , halign='center', color=[0.32, 1, 0.89, 1])
+        result = edtDisplay()
+        result.text = (self.res)
+        self.add_widget(result)
+        self.do_layout()
+        self.do_layout()
+        print(self.edt.text)
+
+
+
+
+
+
+
+    # def on_touch_up(self, touch):
+    #     if touch.is_triple_tap:
+    #         self.res = main_mobile(self.nom.text, self.prenom.text)
+    #         self.clear_widgets()
+    #         # result = ScrollableLabel()  # , halign='center', color=[0.32, 1, 0.89, 1])
+    #         result = edtDisplay()
+    #         result.text = (self.res)
+    #         self.add_widget(result)
+    #         self.do_layout()
+    #         self.do_layout()
+    #         print(self.edt.text)
+    #     else:
+    #         pass
 
 
 
