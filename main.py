@@ -2,10 +2,8 @@ import Groups
 import Course
 import server_request as sr
 import Student
+# import User_keep_connection as Ukc
 
-from kivy.uix.widget import *
-from kivy.app import App
-from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 
@@ -34,16 +32,9 @@ class ScrollableLabel(ScrollView):
 
 
 
-Nom = ''
-Prenom = ''
-
-dictionnary = Groups.extract_student_dicts('groupsASI32.csv')
-students = [None]*69
-
-
-
 def set_students_data():
-    print('access')
+    dictionnary = Groups.extract_student_dicts('groupsASI32.csv')
+    students = [None] * 69
     for i in range(len(students)):
         print(i)
         students[i] = Student.Student()
@@ -66,6 +57,7 @@ def set_students_data():
         students[i].set_lv2(dictionnary[i]['LV2\n1,5'])
     return students
 
+
 def today_courses(student):
     courses_of_today = sr.recuperate()
     print(len(courses_of_today))
@@ -73,7 +65,7 @@ def today_courses(student):
     list_of_Courses =[None]*len(courses_of_today)
     for i in range(len(courses_of_today)):
         test_course = Course.Course()
-        try :
+        try:
             test_course.set_scheduled(courses_of_today[i][3])
         except IndexError:
             test_course.set_scheduled('N/A')
@@ -94,7 +86,10 @@ def today_courses(student):
         except IndexError:
             subject = subject_lv = 'N/A'
         if test_course.group != '*':
-            if (test_course.group) == (student.get_subject_group(subject)) or (test_course.group) == student.get_subject_group(subject)[0] or test_course.group == student.get_subject_group(subject_lv) or test_course.group == student.get_subject_group(subject_lv)[0]:
+            if (test_course.group == student.get_subject_group(subject)) or \
+                    (test_course.group == student.get_subject_group(subject)[0]) or \
+                    test_course.group == student.get_subject_group(subject_lv) or \
+                    test_course.group == student.get_subject_group(subject_lv)[0]:
                 list_of_Courses[i] = test_course
         else:
             list_of_Courses[i] = test_course
@@ -107,6 +102,7 @@ def retrieve_id_from_name(students, nom, prenom):
             return s.id
     return -1
 
+
 def main():
     nom = input("Nom :")
     prenom = input('Prénom :')
@@ -114,7 +110,7 @@ def main():
     id = retrieve_id_from_name(students, nom, prenom)
     classes = today_courses(students[id-1])
     for cl in classes:
-        if cl != None:
+        if not (cl is None):
             print(cl.title)
             print(cl.teacher)
             print(cl.scheduled)
@@ -122,58 +118,56 @@ def main():
             print()
 
 
-
 def main_mobile(nom, prenom):
     students = set_students_data()
     id = retrieve_id_from_name(students, nom, prenom)
     classes = today_courses(students[id-1])
-    res =''
+    res = ''
     for cl in classes:
-        if cl != None:
-            res+=cl.title
-            res+='\n'
-            res+=cl.teacher
-            res+='\n'
-            res+=cl.scheduled
-            res+='\n'
-            res+=cl.room
-            res+='\n'
-            res+='\n'
+        if not (cl is None):
+            res += cl.title
+            res += '\n'
+            res += cl.teacher
+            res += '\n'
+            res += cl.scheduled
+            res += '\n'
+            res += cl.room
+            res += '\n'
+            res += '\n'
     print('Done')
     return res
 
 
-
-class edtDisplay(ScrollableLabel):
+class EdtDisplay(ScrollableLabel):
     def __init__(self, **kwargs):
         super(ScrollableLabel, self).__init__(**kwargs)
         self.text = ''
 
-    def update_padding(self, text_input, *args):
-        text_width = text_input._get_text_width(
-            text_input.text,
-            text_input.tab_width,
-            text_input._label_cached
-        )
-        text_input.padding_x = (text_input.width - text_width) / 2
+    # def update_padding(self, text_input, *args):
+    #     text_width = text_input._get_text_width(
+    #         text_input.text,
+    #         text_input.tab_width,
+    #         text_input._label_cached
+    #     )
+    #     text_input.padding_x = (text_input.width - text_width) / 2
 
     def set_text(self, text):
         self.text = text
 
 
-
-
 class LoginScreen(GridLayout):
 
     res = ''
-    edt = edtDisplay()
-    nom =TextInput
+    edt = EdtDisplay()
+    nom = TextInput
     prenom = TextInput
     def __init__(self, **kwargs):
 
         super(LoginScreen, self).__init__(**kwargs)
-        validation_button = Button(text='Valider', font_size=14)
+        validation_button = Button(text='Valider', font_size=38)
         validation_button.on_press = self.callback_for_button
+        validation_button.background_normal = 'white.png'
+        validation_button.background_color =[0, 1, 0, 0]
         self.cols = 1
         self.add_widget(Label(text='Nom'))
         self.nom = TextInput(multiline=False)
@@ -185,24 +179,17 @@ class LoginScreen(GridLayout):
         self.add_widget(Label(text=''))
         self.add_widget(validation_button)
         # self.add_widget(self.edt)
-        self.edt = edtDisplay()
+        self.edt = EdtDisplay()
 
     def callback_for_button(self):
         self.res = main_mobile(self.nom.text, self.prenom.text)
+        # Ukc.save_user('user.csv', self.prenom, self.nom)
         self.clear_widgets()
         # result = ScrollableLabel()  # , halign='center', color=[0.32, 1, 0.89, 1])
-        result = edtDisplay()
-        result.text = (self.res)
+        result = EdtDisplay()
+        result.text = self.res
         self.add_widget(result)
         self.do_layout()
-        self.do_layout()
-        print(self.edt.text)
-
-
-
-
-
-
 
     # def on_touch_up(self, touch):
     #     if touch.is_triple_tap:
@@ -217,8 +204,6 @@ class LoginScreen(GridLayout):
     #         print(self.edt.text)
     #     else:
     #         pass
-
-
 
 
 class MainApp(App):
