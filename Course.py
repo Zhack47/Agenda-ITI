@@ -31,6 +31,27 @@ class Course:
     def set_is_lv(self, is_lv):
         self.is_lv = is_lv
 
+    def get_teacher(self):
+        return self.teacher
+
+    def get_title(self):
+        return self.title
+
+    def get_group(self):
+        return self.group
+
+    def get_room(self):
+        return self.room
+
+    def get_subject(self):
+        return self.subject
+
+    def get_scheduled(self):
+        return self.scheduled
+
+    def get_is_lv(self):
+        return self.is_lv
+
 
 def extract_subject_from_course_title(string):
     if 'pao' in string:
