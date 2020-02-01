@@ -2,7 +2,8 @@ import Groups
 import Course
 import server_request as sr
 import Student
-import toast
+from App import *
+from kivy.app import App
 # import User_keep_connection as Ukc
 
 def set_students_data():
@@ -32,38 +33,41 @@ def set_students_data():
 
 def today_courses(student):
     courses_of_today = sr.recuperate()
-    list_of_Courses =[None]*len(courses_of_today)
-    for i in range(len(courses_of_today)):
-        test_course = Course.Course()
-        try:
-            test_course.set_scheduled(courses_of_today[i][3])
-        except IndexError:
-            test_course.set_scheduled('N/A')
-        try:
-            test_course.set_room(courses_of_today[i][2])
-        except IndexError:
-            test_course.set_room('N/A')
-        try:
-            test_course.set_teacher(courses_of_today[i][1])
-        except IndexError:
-            test_course.set_teacher('N/A')
-        test_course.set_title(courses_of_today[i][0])
-        test_course.group = Groups.extract_group_from_course(test_course)
-        test_course.subject = Course.extract_subject_from_course_title(test_course.title)
-        try:
-            subject = test_course.title.split(':')[1].split('-')[1].split(' ')[0]
-            subject_lv =test_course.title.split(' ')[2]
-        except IndexError:
-            subject = subject_lv = 'N/A'
-        if test_course.group != '*':
-            if (test_course.group == student.get_subject_group(subject)) or \
-                    (test_course.group == student.get_subject_group(subject)[0]) or \
-                    test_course.group == student.get_subject_group(subject_lv) or \
-                    test_course.group == student.get_subject_group(subject_lv)[0]:
+    if courses_of_today == sr.__ERROR_NETWORK_UNREACHABLE__:
+        return sr.__ERROR_NETWORK_UNREACHABLE__
+    else:
+        list_of_Courses =[None]*len(courses_of_today)
+        for i in range(len(courses_of_today)):
+            test_course = Course.Course()
+            try:
+                test_course.set_scheduled(courses_of_today[i][3])
+            except IndexError:
+                test_course.set_scheduled('N/A')
+            try:
+                test_course.set_room(courses_of_today[i][2])
+            except IndexError:
+                test_course.set_room('N/A')
+            try:
+                test_course.set_teacher(courses_of_today[i][1])
+            except IndexError:
+                test_course.set_teacher('N/A')
+            test_course.set_title(courses_of_today[i][0])
+            test_course.group = Groups.extract_group_from_course(test_course)
+            test_course.subject = Course.extract_subject_from_course_title(test_course.title)
+            try:
+                subject = test_course.title.split(':')[1].split('-')[1].split(' ')[0]
+                subject_lv =test_course.title.split(' ')[2]
+            except IndexError:
+                subject = subject_lv = 'N/A'
+            if test_course.group != '*':
+                if (test_course.group == student.get_subject_group(subject)) or \
+                        (test_course.group == student.get_subject_group(subject)[0]) or \
+                        test_course.group == student.get_subject_group(subject_lv) or \
+                        test_course.group == student.get_subject_group(subject_lv)[0]:
+                    list_of_Courses[i] = test_course
+            else:
                 list_of_Courses[i] = test_course
-        else:
-            list_of_Courses[i] = test_course
-    return list_of_Courses
+        return list_of_Courses
 
 
 def retrieve_id_from_name(students, nom, prenom):
@@ -92,19 +96,33 @@ def main_mobile(nom, prenom):
     students = set_students_data()
     id = retrieve_id_from_name(students, nom, prenom)
     classes = today_courses(students[id-1])
-    res = ''
-    for cl in classes:
-        if not (cl is None):
-            res += cl.title
-            res += '\n'
-            res += cl.teacher
-            res += '\n'
-            res += cl.scheduled
-            res += '\n'
-            res += cl.room
-            res += '\n'
-            res += '\n'
-    print('Done')
-    return res
+    if classes == sr.__ERROR_NETWORK_UNREACHABLE__:
+        return  sr.__ERROR_NETWORK_UNREACHABLE__
+    else:
+        res = ''
+        for cl in classes:
+            if not (cl is None):
+                res += cl.title
+                res += '\n'
+                res += cl.teacher
+                res += '\n'
+                res += cl.scheduled
+                res += '\n'
+                res += cl.room
+                res += '\n'
+                res += '\n'
+        print('Done')
+        return res
+
+class MainApp(App):
+
+    def build(self):
+        log = LoginScreen()
+        return log
+
+
+if __name__ == '__main__':
+    app = MainApp()
+    app.run()
 
 

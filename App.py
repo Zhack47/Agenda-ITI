@@ -5,7 +5,7 @@ from kivy.uix.textinput import TextInput
 from kivy.app import App
 from kivy.uix.label import Label
 from kivy.uix.button import Button
-
+import main
 from kivy.uix.scrollview import ScrollView
 from kivy.properties import StringProperty
 from kivy.lang import Builder
@@ -70,18 +70,21 @@ class LoginScreen(GridLayout):
         # self.edt = EdtDisplay()
 
     def callback_for_button(self):
-        self.res = main_mobile(self.nom.text, self.prenom.text)
-        # Ukc.save_user('user.csv', self.prenom, self.nom)
-        self.clear_widgets()
-        # result = ScrollableLabel()  # (), halign='center', color=[0.32, 1, 0.89, 1])
-        result = EdtDisplay(color=[0.32, 1, 0.89, 1])
-        result.halign = 'center'
-        result.valign = "middle"
-        result.text = self.res
-        result.valign = "middle"
-        result.halign = 'center'
-        self.add_widget(result)
-        self.do_layout()
+        self.res = main.main_mobile(self.nom.text, self.prenom.text)
+        if self.res == sr.__ERROR_NETWORK_UNREACHABLE__:
+            return 0
+        else:
+            # Ukc.save_user('user.csv', self.prenom, self.nom)
+            self.clear_widgets()
+            # result = ScrollableLabel()  # (), halign='center', color=[0.32, 1, 0.89, 1])
+            result = EdtDisplay(color=[0.32, 1, 0.89, 1])
+            result.halign = 'center'
+            result.valign = "middle"
+            result.text = self.res
+            result.valign = "middle"
+            result.halign = 'center'
+            self.add_widget(result)
+            self.do_layout()
 
     # def on_touch_up(self, touch):
     #     if touch.is_triple_tap:
@@ -96,15 +99,3 @@ class LoginScreen(GridLayout):
     #         print(self.edt.text)
     #     else:
     #         pass
-
-
-class MainApp(App):
-
-    def build(self):
-        log = LoginScreen()
-        return log
-
-
-if __name__ == '__main__':
-    app = MainApp()
-    app.run()

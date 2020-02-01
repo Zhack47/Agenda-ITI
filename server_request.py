@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import time
 import date_checker
 import toast
+__ERROR_NETWORK_UNREACHABLE__ = '1'
 
 
 def recuperate():
@@ -14,7 +15,7 @@ def recuperate():
         r = requests.get('http://193.49.10.198/day.php', params=payload)
     except:
         toast.toast('Network unreachable')
-        return []
+        return __ERROR_NETWORK_UNREACHABLE__
     soup = BeautifulSoup(r.text, 'html.parser')
     mydivs = soup.findAll("a", {"class": "ps"})
     courses = [(i.attrs) for i in mydivs]

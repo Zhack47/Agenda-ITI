@@ -1,3 +1,4 @@
+kivymd
 kivy
 requests
 python-csv
