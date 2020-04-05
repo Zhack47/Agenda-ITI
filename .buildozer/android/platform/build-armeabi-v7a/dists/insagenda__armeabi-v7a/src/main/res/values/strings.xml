@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Agenda-ITI</string>
+    <string name="private_version">1586115569.275692</string>
+    <string name="presplash_color">aqua</string>
+    <string name="urlScheme">kivy</string>
+</resources>

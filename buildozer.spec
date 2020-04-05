@@ -46,7 +46,7 @@ requirements = python3,kivy,requests,beautifulsoup4,times,datetime,python-csv,ki
 #garden_requirements =
 
 # (str) Presplash of the application
-presplash.filename = %(source.dir)s/icon2.png
+presplash.filename = %(source.dir)s/icon.png
 
 # (str) Icon of the application
 icon.filename = %(source.dir)s/icon.png
