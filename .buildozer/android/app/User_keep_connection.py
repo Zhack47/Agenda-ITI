@@ -2,7 +2,7 @@ import csv
 
 
 def save_user(filename, prenom, nom):
-    with open(filename, 'r+') as csvfile:
+    with open(filename, 'w') as csvfile:
 #        reader = csv.DictReader(csvfile)
  #       results = []
   #      for row in reader:

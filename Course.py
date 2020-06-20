@@ -65,5 +65,5 @@ def extract_subject_from_course_title(string):
     elif 'Allemand' in string:
         subject = 'Allemand'
     else:
-        subject =string.split(':')[1].split(' ')[1]
+        subject = string.split(':')[1].split(' ')[1]
     return subject

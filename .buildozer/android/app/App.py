@@ -51,12 +51,13 @@ class LoginScreen(GridLayout):
     prenom = TextInput
 
     def __init__(self, **kwargs):
+        super(LoginScreen, self).__init__(**kwargs)
+        self.clear_widgets()
         array_of_users = Ukc.load_usernames('user.csv')
-        for i in array_of_users:
-            button_personal = Button(text=i['first_name']+" "+i['last_name'], font_size=34)
+        for i in range(len(array_of_users)):
+            button_personal = Button(text=array_of_users[i]['first_name']+" "+array_of_users[i]['last_name'], font_size=34)
             button_personal.on_press = self.in_callback
             self.add_widget(button_personal)
-        super(LoginScreen, self).__init__(**kwargs)
         validation_button = Button(text='Valider', font_size=34)
         validation_button.on_press = self.callback_for_button
         validation_button.background_normal = ''
@@ -73,6 +74,7 @@ class LoginScreen(GridLayout):
         self.add_widget(validation_button)
 
     def in_callback(self):
+        self.clear_widgets()
         one =Ukc.load_usernames('user.csv')[0]
         self.res = main.main_mobile(one['first_name'], one['last_name'])
         if self.res == sr.__ERROR_NETWORK_UNREACHABLE__:
@@ -95,6 +97,7 @@ class LoginScreen(GridLayout):
 
 
     def callback_for_button(self):
+        self.clear_widgets()
         self.res = main.main_mobile(self.nom.text, self.prenom.text)
         if self.res == sr.__ERROR_NETWORK_UNREACHABLE__:
             return 0

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-from datetime import datetime
+from datetime import datetime, date
 
 
 def check_if_date_is_valid(date):
@@ -54,7 +54,7 @@ Days_of_the_week = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi",
 Day_number = ["31", "30", "29", "28", "27", "26", "25", "24", "23", "22", "21", "20", "19", "18", "17", "16", "15", "14", "13", "12", "11", "10", "9",  "8",  "7",  "6",
               "5",  "4",  "3",  "2", "1"]
 MonthsFr = ["janvier", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
-Months = ["Jan", "Feb", "Mar", "Apr", "May", "Jul", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+Months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 Years = [1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987,
          1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
          2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023,
@@ -68,6 +68,8 @@ def get_date_from_string(string):
     day, data = detect_str_day_number_in_str(string, Day_number)
     return day, month, year
 
+def get_date_string():
+    return "".join(str(date.today()).split("-"))
 
 def get_date_from_time_unit(string):
     string = " ".join([string.split(" ")[0], string.split(" ")[1], string.split(" ")[3], string.split(" ")[-1]])
@@ -80,7 +82,7 @@ def get_date_from_time_unit(string):
 
 
 def detect_str_month_number_in_str(data, months):
-    for string in Months:
+    for string in months:
         data.replace(str(string), '')
         if str(string) in data:
             data = data.replace(str(string), '')

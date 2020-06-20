@@ -122,10 +122,10 @@ class MainApp(App):
     def build(self):
         log = LoginScreen()
         return log
-
+    def on_stop(self):
+        super()
+        self.stop()
 
 if __name__ == '__main__':
     app = MainApp()
     app.run()
-
-
