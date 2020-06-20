@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import time
 import date_checker
 import toast
 __ERROR_NETWORK_UNREACHABLE__ = '1'
@@ -17,8 +16,8 @@ def recuperate():
         return __ERROR_NETWORK_UNREACHABLE__
     soup = BeautifulSoup(r.text, 'html.parser')
     # print(soup.text)
-    mydivs = soup.findAll("a", {"class": "ps"})
-    courses = [i.attrs for i in mydivs]
+    my_divs = soup.findAll("a", {"class": "ps"})
+    courses = [i.attrs for i in my_divs]
     print(courses)
     for i in range(len(courses)):
         courses[i] = courses[i]['title'].split("\n")

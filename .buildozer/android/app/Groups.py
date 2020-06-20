@@ -2,13 +2,11 @@ import csv
 
 
 def extract_student_dicts(csv_filename):
-    students_dicts =[None]*71
-    student_i_dict = {}
+    students_dicts = [None]*71
     i = 0
     with open(csv_filename, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            student_i_dict = row.keys()
             students_dicts[i] = row
             i += 1
     return students_dicts

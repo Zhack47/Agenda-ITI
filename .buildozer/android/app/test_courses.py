@@ -1,5 +1,6 @@
 import Course
-import main
+
+
 def test_set_get():
     course = Course.Course()
     name = 'foo', str(course)

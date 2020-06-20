@@ -90,13 +90,13 @@ class Student:
         return self.tw
 
     def get_compil(self):
-        return  self.compil
+        return self.compil
 
     def get_tsa(self):
         return self.tsa
 
     def get_stat(self):
-        return  self.stat
+        return self.stat
 
     def get_lv2(self):
         return self.lv2
@@ -111,7 +111,7 @@ class Student:
         return self.droit
 
     def get_qua(self):
-        return  self.qua
+        return self.qua
 
     def get_tuteur(self):
         return self.tuteur
